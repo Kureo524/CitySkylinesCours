@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using BuildingSystem;
+using Currencies;
 using Inputs;
 using Map;
 using UnityEngine;
@@ -24,17 +25,22 @@ namespace Management
         private MapInputSolver _mapInputSolver;
         private CityBuilder _cityBuilder;
         private MapContainer _map;
+        private CurrencyContainer _currencyContainer;
 
         private List<Vector2Int> _clickedLocations = new List<Vector2Int>();
 
-        public void Start()
-        {
+        public void Start() {
             _mainGrid = new Grid(gridSize.x, gridSize.y);
             _inputSolver = GetComponent<InputSolver>();
             _mapInputSolver = new MapInputSolver(ref _inputSolver.OnClickStarted, floorMask);
             _mapInputSolver.OnMapClicked += TryBuildingOnClick;
             _cityBuilder = GetComponent<CityBuilder>();
             _map = new MapContainer(gridSize);
+            _currencyContainer = new CurrencyContainer(new[] {
+                (ECurrencyType.Cash, 300),
+                (ECurrencyType.Population, 0),
+                (ECurrencyType.Favorability, 0)
+            });
         }
 
         private void TryBuildingOnClick(Vector2Int location)

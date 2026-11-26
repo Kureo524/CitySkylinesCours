@@ -19,7 +19,17 @@ namespace Currencies {
         }
 
         public void AddTo(ECurrencyType type, int amount) {
-            
+            if (!Currencies.ContainsKey(type)) return;
+            Currencies[type] += amount;
+        }
+        
+        public bool HasAmount(ECurrencyType type, int amount) {
+            if (!Currencies.ContainsKey(type)) return false;
+            return amount <= Currencies[type];
+        }
+
+        public void Use(ECurrencyType type, int amount) {
+            if (Currencies.ContainsKey(type)) Currencies[type] -= amount;
         }
     }
 }
